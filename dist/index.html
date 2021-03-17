@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.dataTables.min.css"
+    />
+    <title>pomodoro.place</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row el-opc">
+      <div class="accordion col-md-12 instructions spacing bg-secondary bg-gradient rounded mb-5" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              Instructions
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body col-md-12">
+              <ul class='col-md-12'>
+                <li>Work for 25 uninterrupted minutes</li>
+                <li>Break for 5 minutes</li>
+                <li>
+                  Every four cycles, take a 15-30 minute break, preferably outside
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="row justify-content-center mb-3">
+        <button
+          id="modalFullScreenTrigger"
+          type="button"
+          class="btn btn-primary el-opc"
+          data-bs-toggle="modal"
+          data-bs-target="#modalFullscreen"
+        >
+          Task List
+        </button>
+      </div>
+      <form
+        class="row g-3 justify-content-center mb-3 bg-secondary bg-gradient rounded-top mt-3 el-opc"
+        id="task-form"
+      >
+        <div class="col-auto">
+          <input
+            type="text"
+            class="shadow form-control"
+            placeholder="Task Title"
+            maxlength="20"
+          />
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="shadow btn btn-secondary mb-3" disabled>
+            Add Task
+          </button>
+        </div>
+      </form>
+      <div id="pomodoro-times-wrapper" class="row">
+        <div
+          class="row col-md-3 bg-secondary bg-gradient rounded-start mx-auto el-opc"
+        ></div>
+        <form
+          id="pomodoro-times"
+          class="row col-md-6 bg-info p-5 mx-auto el-opc"
+        >
+          <div class="col-md-6 mt-4">
+            <label
+              for="taskCycle"
+              class="shadow col-form-label-sm col-sm-12 text-center bg-secondary bg-gradient rounded mt-1 p-2"
+              >Cycles</label
+            >
+            <input
+              type="number"
+              class="shadow form-control form-control-sm bg-danger text-dark bg-gradient text-center"
+              name="cycles"
+              id="taskCycle"
+              value="4"
+              maxlength="2"
+            />
+          </div>
+          <div class="col-md-6 mt-4">
+            <label
+              for="sessionMinute"
+              class="shadow col-form-label-sm col-sm-12 text-center bg-secondary bg-gradient rounded mt-1 p-2"
+              >Period Time</label
+            >
+            <input
+              type="number"
+              class="shadow form-control form-control-sm bg-danger text-dark bg-gradient text-center"
+              name="period_time"
+              id="sessionMinute"
+              value="25"
+              maxlength="2"
+            />
+          </div>
+          <div class="col-md-6 mt-4">
+            <label
+              for="cycleShortBreak"
+              class="shadow col-form-label-sm col-sm-12 text-center bg-secondary bg-gradient rounded mt-1 p-2"
+              >Short Break</label
+            >
+            <input
+              type="number"
+              class="shadow form-control form-control-sm bg-danger text-dark bg-gradient text-center"
+              name="short_break"
+              id="cycleShortBreak"
+              value="5"
+              maxlength="2"
+            />
+          </div>
+          <div class="col-md-6 mt-4">
+            <label
+              for="cycleLongBreak"
+              class="shadow col-form-label-sm col-sm-12 text-center bg-secondary bg-gradient rounded mt-1 p-2"
+              >Long Break</label
+            >
+            <input
+              type="number"
+              class="shadow form-control form-control-sm bg-danger text-dark bg-gradient text-center"
+              name="long_break"
+              id="cycleLongBreak"
+              value="15"
+              maxlength="2"
+            />
+          </div>
+        </form>
+        <div
+          class="row col-md-3 bg-secondary bg-gradient rounded-end mx-auto el-opc"
+        ></div>
+      </div>
+      <div
+        class="row bg-info rounded-bottom justify-content-center el-opc mt-3"
+      >
+        <div class="row mt-5 mb-5">
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button
+              id="task-create"
+              class="btn btn-primary me-md-2 shadow"
+              type="button"
+              disabled
+            >
+              Create
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div id="task-controller" class="col-md-12 action-buttons spacing">
+            <div class="btn-group" role="group">
+              <button type="button" class="shadow btn btn-danger" id="start">
+                Start
+              </button>
+              <button type="button" class="shadow btn btn-warning" id="pause">
+                Pause
+              </button>
+              <button type="button" class="shadow btn btn-secondary" id="end">
+                End
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modals -->
+      <div
+        class="modal fade"
+        id="end-message"
+        tabindex="-1"
+        aria-labelledby="end-messageLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header el-opc">
+              <h5 class="modal-title" id="end-messageLabel">Task Message</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="modal fade"
+        id="modalTaskScreen"
+        tabindex="-1"
+        aria-labelledby="modalTaskScreenLabel"
+        aria-modal="true"
+        role="dialog"
+      >
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title h4" id="modalTaskScreenLabel"></h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="modal fade"
+        id="modalFullscreen"
+        tabindex="-1"
+        aria-labelledby="modalFullscreenLabel"
+        aria-modal="true"
+        role="dialog"
+      >
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen el-opc">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title h4" id="modalFullscreenLabel">Tasks</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mt-5">
+                <table id="task_table" class="table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>id</th>
+                      <th>title</th>
+                      <th>completed</th>
+                      <th>action</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>id</th>
+                      <th>title</th>
+                      <th>completed</th>
+                      <th>action</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <audio id="long-break" src="sound/long_break.mp3"></audio>
+    <audio id="short-break" src="sound/short_break.mp3"></audio>
+
+    <script src="./bundle.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

@@ -17,6 +17,9 @@ export const removeFromLocalStorage = (taskId) => {
   setLocalStorage(arranged);
 };
 
+// ---------------------
+// Remotely ---------------------
+// ---------------------
 export const getDataFromApi = () => {
   if (isLocal) {
     // Local
@@ -29,9 +32,6 @@ export const getDataFromApi = () => {
   }
 };
 
-// ---------------------
-// Remotely ---------------------
-// ---------------------
 export const addTaskToApi = (task) => {
   if (isLocal) {
     // Local

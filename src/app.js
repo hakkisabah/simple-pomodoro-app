@@ -81,7 +81,6 @@ class PomodoroApp extends ElementProcess {
     this.$taskFormAddButton.disabled = true;
     this.elementSwitcherForCurrentInfo(this.$pomodoroTimes);
     this.currentPomodoroTimes = {};
-    this.currentPomodoroTimes = {};
     endMessage(
       `${
         message === ''
